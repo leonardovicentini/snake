@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-__author__ = "Vicentini Leonardo"
-__version__ = "04_01"
+__author__ = "Leonardo Vicentini"
+__version__ = "01_01"
 
 
 import os
@@ -9,19 +9,19 @@ import pygame
 import random
 
 
-boold =  True
+boold =  False
 
 
 def contact(lista):
     """
-    Questa funzione restituisce valore booleano True se l'ultimo elemento della lista è presente anche in altr posizioni.
-    :param lista: list Lista da analizzare.
-    :return: bool True se l'ultimo elemento compare più volte.
+    This function returns a Boolean value True if the last element of the list is also present in other positions.
+    :param list: list List to be analyzed.
+    :return: bool True if the last element appears multiple times.
     """
     duplicate = False
     for i in range(0, len(lista) -1):
         if lista[i] == lista[-1]:
-            if boold: print("Contatto in posizione ", i)
+            if boold: print("Contact in pos: ", i)
             duplicate = True
     
     return duplicate
@@ -29,16 +29,15 @@ def contact(lista):
 
 def random_food_pos(win_width, win_height, food_width, food_height, snake_positions):
     """
-    Questa funzione ritorna due posizioni x e y in cui generare il cibo da mangiare per il serpente.
-    :param win_width: int Pixel larghezza della finestra.
-    :param win_height: int pixel altezza finestra.
-    :param food_width: int Pixel larghezza del cibo.
-    :param food_height: int Pixel altezza del cibo.
-    :param snake_position: list Lista di posizioni dei quadrati che formano il repente.
-    :return xf: int Posizione x accettabile per il cibo.
-    :return yf int Posizione y accettabile per il cibo.
+    This function returns two x and y positions in which to generate food for the snake to eat.
+    :param win_width: int Pixel window width.
+    :param win_height: int pixel window height.
+    :param food_width: int Pixel width of the food.
+    :param food_height: int Pixel height of the food.
+    :param snake_position: list List of positions of the squares that make up the snake.
+    :return xf: int Position x acceptable for food.
+    :return yf int Position y acceptable for food.
     """
-
     invalid = True
 
     while invalid:
@@ -54,10 +53,9 @@ def random_food_pos(win_width, win_height, food_width, food_height, snake_positi
 
 if __name__ == "__main__":
 
-    if boold:
-        print("Start main")
+    if boold: print("Start main")
 
-    # inizializzo variabili pygame
+    # Initializing pygame variables
     pygame.init()
     sfondo = 0, 0, 0
     snake_color = 0, 200, 0
@@ -71,7 +69,7 @@ if __name__ == "__main__":
     pygame.display.set_caption("Snake")
     run = True
 
-    # Variabili di gioco
+    # Game variables
     score = 0
     r_width, r_height = 25, 25
     speed_x, speed_y = r_width, 0
@@ -80,17 +78,17 @@ if __name__ == "__main__":
 
     while run:
         
-        # Testo segna punti
+        # Scoreboard
         score_text = small_font.render(f"{score}", 1, text_color)
 
-        # lettura input per cambio direzione aggiornando 'speed_x' e 'speed_y'
+        # reading input for changing direction by updating 'speed_x' and 'speed_y'
         keys = pygame.key.get_pressed()
         if keys[pygame.K_LEFT] and speed_x != r_width: speed_x, speed_y = -r_width, 0
         if keys[pygame.K_RIGHT] and  speed_x != -r_width: speed_x, speed_y = r_width, 0
         if keys[pygame.K_UP] and speed_y != r_height: speed_x, speed_y = 0, -r_height
         if keys[pygame.K_DOWN] and speed_y != -r_height: speed_x, speed_y = 0, +r_height
         
-        # Aggiornamento
+        # Updating
         x_new_snake_head = snake_parts_position[-1][0] 
         y_new_snake_head = snake_parts_position[-1][1] 
         x_new_snake_head += speed_x
@@ -98,12 +96,12 @@ if __name__ == "__main__":
         if x_new_snake_head != x_food or y_new_snake_head != y_food: snake_parts_position = snake_parts_position[1:]
         snake_parts_position.append([x_new_snake_head, y_new_snake_head])
 
-        # Assegnamento del punto
+        # Score assignment
         if x_new_snake_head == x_food and y_new_snake_head == y_food:
             x_food, y_food = random_food_pos(w_width, w_height, r_width, r_height, snake_parts_position)
             score += 1
 
-        # Verifica che non esca dal riquadro
+        # Make sure it doesn't come out of the box
         for i in range(0, len(snake_parts_position)):
             if snake_parts_position[i][0] > (w_width - r_width): snake_parts_position[i][0] = 0
             if snake_parts_position[i][1] > (w_height - r_height): snake_parts_position[i][1] = 0
@@ -114,7 +112,7 @@ if __name__ == "__main__":
         
         if contact(snake_parts_position): run = False
 
-        # Disegno degli oggetti
+        # Drawing objects
         win.fill(sfondo) 
         win.blit(score_text, (w_width - score_text.get_rect().width, 0))
         for x_part, y_part in snake_parts_position:
@@ -137,5 +135,4 @@ if __name__ == "__main__":
 
     pygame.quit()
 
-    if boold:
-        print("End main")
+    if boold: print("End main")
